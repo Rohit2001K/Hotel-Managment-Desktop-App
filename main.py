@@ -16,7 +16,9 @@ class login:
         self.login_msg=Label(root,text="Please Enter Your UserID And Password Below").pack(pady=10)
 
         #userid and password
-
+        self.user=Entry(self.root,width=30).pack()
+        self.password=Entry(self.root,width=30).pack()
+        self.login_button=Button(self.root,text='Login').pack()
 
 
 
