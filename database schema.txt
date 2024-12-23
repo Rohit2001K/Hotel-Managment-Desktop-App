@@ -1,0 +1,33 @@
+#crate an DATABSE and here the project tables use in this project
+
+
+CREATE TABLE Rooms (
+    room_no INT PRIMARY KEY,
+    available BOOLEAN DEFAULT TRUE,
+    beds INT NOT NULL, 
+    price int(5) NOT NULL 
+);
+
+CREATE TABLE Users (
+    uid INT PRIMARY KEY AUTO_INCREMENT, 
+    fname VARCHAR(100) NOT NULL,
+    lname VARCHAR(100) NOT NULL, 
+    mobile VARCHAR(15), 
+    staff_member BOOLEAN DEFAULT FALSE, 
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE Bookings (
+    booking_id INT PRIMARY KEY AUTO_INCREMENT, 
+    uid INT, 
+    room_no INT,
+    check_in DATETIME NOT NULL,
+    check_out DATETIME NOT NULL,
+    FOREIGN KEY (uid) REFERENCES Users(uid), 
+    FOREIGN KEY (room_no) REFERENCES Rooms(room_no),
+    CONSTRAINT room_availability CHECK (check_in < check_out), 
+    CONSTRAINT room_booked CHECK (available = FALSE),  
+    CONSTRAINT unique_booking UNIQUE (room_no, check_in) 
+);
