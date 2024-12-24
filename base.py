@@ -7,7 +7,7 @@ if my_sql.is_connected():
     cursor=my_sql.cursor()
 
 
-class login:
+class User_actions:
     def __init__(self,user,password):
         self.user=user
         self.password=password
@@ -16,15 +16,14 @@ class login:
         cursor.execute(f"select uid from users where fname='{self.user}' and password='{self.password}'")
         user_auth=cursor.fetchone()
         if user_auth:
-            return user_auth
+            return self.user
+            
         else:
-            return "Incorrect username or password"
+            return False
         
         
 
 
-
-        
 
         
         
