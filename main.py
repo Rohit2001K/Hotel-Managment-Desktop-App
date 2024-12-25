@@ -4,17 +4,18 @@ from base import User_actions
 
 class login:
     def __init__(self,root):
-
-
         #basic config
         self.root=root
         self.root.title("R Hotel")
         self.root.geometry("500x400")
+        self.login_form()
 
-        #messages
+
+    def login_form(self):
+
+        self.clear_screen()
         self.welcome_msg=Label(root,text="Welcome",font=("", 25))
         self.welcome_msg.grid(row=0, column=3)
-
         self.login_msg=Label(root,text="Please Enter Your UserID And Password Below")
         self.login_msg.grid(row=1, column=3, padx=10, pady=10)
 
@@ -61,6 +62,25 @@ class login:
         self.password.destroy()
         self.login_button.destroy()
         self.User_create_button.destroy()
+
+    def user_creation_form_clear(self):
+        self.fname.destroy()
+        self.fname_lable.destroy()
+
+        self.lname_lable.destroy()
+        self.lname.destroy()
+
+        self.mobile_lable.destroy()
+        self.mobile.destroy()
+
+        self.email_lable.destroy()
+        self.email.destroy()
+
+        self.pass1_lable.destroy()
+        self.pass1.destroy()
+
+        self.pass2_lable.destroy()
+        self.pass2.destroy()
 
 
 
@@ -109,11 +129,20 @@ class login:
         email=self.email.get()
         if self.pass1.get()==self.pass2.get():
             password=self.pass1.get()
-            return password
+            user=User_actions()
+            result=user.create_user(fname,lname,mobile,email,password)
+            if result:
+                self.user_creation_form_clear()
+                self.login_msg.config(text=f'Account Created')
+                self.back_button=Button(self.root,text='Back To Login',command=self.login_form)
+                self.back_button.grid(row=4, column=3, padx=10, pady=10)
+                
         else:
             self.login_msg.config(text=f'Please Check Your Passwords')
 
-        
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()        
 
 root=tkinter.Tk()
 
