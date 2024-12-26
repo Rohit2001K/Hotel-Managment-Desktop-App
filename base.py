@@ -2,14 +2,13 @@ import mysql.connector as ms
 
 
 
-my_sql=ms.connect(host='localhost',user='',passwd='',database='test')
+my_sql=ms.connect(host='localhost',user='root',passwd='1030',database='test')
 if my_sql.is_connected():
     cursor=my_sql.cursor()
 
 
 class User_actions:
-    
-        
+ 
     def __init__(self, user=None, password=None):
         self.user = user
         self.password = password
@@ -30,9 +29,14 @@ class User_actions:
         except:
             return False 
         
-        
 
+    def room_booking(self):
+        cursor.execute('select room_no,beds,price from Rooms where available=True')
+        result=cursor.fetchall()
+        return result    
 
+    def room_booking_conform(self,user,room_no):
+        cursor.execute('')
 
 
         

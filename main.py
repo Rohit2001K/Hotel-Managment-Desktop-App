@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
 from base import User_actions
+from tkinter import ttk
 
 class login:
     def __init__(self,root):
@@ -15,7 +16,7 @@ class login:
 
         self.clear_screen()
         self.welcome_msg=Label(root,text="Welcome",font=("", 25))
-        self.welcome_msg.grid(row=0, column=3)
+        self.welcome_msg.grid(row=0, column=3,padx=10, pady=10)
         self.login_msg=Label(root,text="Please Enter Your UserID And Password Below")
         self.login_msg.grid(row=1, column=3, padx=10, pady=10)
 
@@ -49,7 +50,9 @@ class login:
             self.password_lable.destroy()
             self.password.destroy()
             self.login_button.destroy()
-            
+            self.User_create_button.destroy()
+            self.book_button=Button(self.root,text='Book Room',command=self.book_rooms)
+            self.book_button.grid(row=4, column=3, padx=10, pady=10)
         else:
             self.login_msg.config(text=f'Invalid username or password')
             self.user.delete(0, END)
@@ -143,6 +146,45 @@ class login:
     def clear_screen(self):
         for widget in self.root.winfo_children():
             widget.destroy()        
+
+
+
+    #After login user options
+
+    def book_rooms(self):
+
+        self.welcome_msg.config(text="Select Room")
+
+        self.login_msg.destroy()
+        self.book_button.destroy()
+        user = User_actions()
+        result = user.room_booking()
+
+        columns = ("Room Number", "Beds", "Price")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
+
+        self.tree.heading("Room Number", text="Room Number")
+        self.tree.heading("Beds", text="Beds")
+        self.tree.heading("Price", text="Price")
+
+        self.tree.column("Room Number", width=100, anchor="center")
+        self.tree.column("Beds", width=100, anchor="center")
+        self.tree.column("Price", width=100, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+        self.tree.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
+        self.room_book_button=Button(self.root,text='Book Room',command='')
+        self.room_book_button.grid(row=3, column=1, padx=10, pady=10)
+   
+        
+        
+    
+
+
+
+
 
 root=tkinter.Tk()
 
