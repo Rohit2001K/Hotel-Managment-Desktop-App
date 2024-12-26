@@ -2,6 +2,8 @@ import tkinter
 from tkinter import *
 from base import User_actions
 from tkinter import ttk
+import datetime
+
 
 class login:
     def __init__(self,root):
@@ -175,12 +177,18 @@ class login:
             self.tree.insert("", "end", values=row)
 
         self.tree.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
-        self.room_book_button=Button(self.root,text='Book Room',command='')
+        self.room_book_button=Button(self.root,text='Book Room',command=self.room_booking)
         self.room_book_button.grid(row=3, column=1, padx=10, pady=10)
    
         
         
-    
+    def room_booking(self):
+        selected_room = self.tree.selection()   
+        if selected_room:
+            room=self.tree.item(selected_room, "values")
+            room_no = room[0]
+            date=datetime.date.today()
+
 
 
 
