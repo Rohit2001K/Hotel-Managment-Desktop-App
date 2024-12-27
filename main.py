@@ -10,7 +10,7 @@ class login:
         #basic config
         self.root=root
         self.root.title("R Hotel")
-        self.root.geometry("500x400")
+        self.root.geometry("500x550")
         self.login_form()
 
 
@@ -43,10 +43,11 @@ class login:
     def loginuser(self):
         username=self.user.get()
         passwd=self.password.get()
-        auth_login=User_actions(username,passwd)
-        result=auth_login.login_user()
+        self.auth_login=User_actions(username,passwd)
+        result=self.auth_login.login_user()
+        self.user_id=result[0]
         if result:
-            self.login_msg.config(text=f'Welcome {result} ')
+            self.login_msg.config(text=f'Welcome {result[1]} ')
             self.user.destroy()
             self.user_lable.destroy()
             self.password_lable.destroy()
@@ -176,23 +177,66 @@ class login:
         for row in result:
             self.tree.insert("", "end", values=row)
 
-        self.tree.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
-        self.room_book_button=Button(self.root,text='Book Room',command=self.room_booking)
-        self.room_book_button.grid(row=3, column=1, padx=10, pady=10)
-   
-        
+        self.tree.grid(row=2, column=1, columnspan=3)
+
+        self.booking_msg=Label(self.root,text="Enter Check Out Date ")
+        self.booking_msg.grid(row=3, column=2,padx=10,pady=10)
+
+        self.date_lable=Label(self.root,text="Date : ")
+        self.date_lable.grid(row=4, column=1,padx=10,pady=10)
+
+        self.date=Entry(self.root,width=20)
+        self.date.grid(row=4, column=2)
+
+        self.month_lable=Label(self.root,text="Month : ")
+        self.month_lable.grid(row=5, column=1,padx=10,pady=10)
+
+        self.month=Entry(self.root,width=20)
+        self.month.grid(row=5, column=2)
+
+        self.year_lable=Label(self.root,text="Year : ")
+        self.year_lable.grid(row=6, column=1,padx=10,pady=10)
+
+        self.year=Entry(self.root,width=20)
+        self.year.grid(row=6, column=2)
+
+
+
+        self.room_book_button=Button(self.root,text='Book Room', command=self.room_booking)
+        self.room_book_button.grid(row=7, column=2,padx=10,pady=10)
+
+        self.error_lable=Label(self.root,text='',bg='red')
+        self.error_lable.grid(row=8, column=2,padx=10,pady=10)
         
     def room_booking(self):
-        selected_room = self.tree.selection()   
+        selected_room = self.tree.selection()  
         if selected_room:
-            room=self.tree.item(selected_room, "values")
-            room_no = room[0]
-            date=datetime.date.today()
-
-
-
-
-
+            check_out_date = self.date.get()
+            check_out_month = self.month.get()
+            check_out_year = self.year.get() 
+            if selected_room:
+                room=self.tree.item(selected_room, "values")
+                try:
+                    check_out_date=int(check_out_date)
+                    check_out_month=int(check_out_month)
+                    check_out_year=int(check_out_year)
+                    date=datetime.date.today()
+                    check_out=datetime.date(check_out_year, check_out_month, check_out_date)
+                    day_count=check_out-date
+                    days=day_count.days
+                    if days<0:
+                        self.error_lable.config(text='Please Type Correct Date')
+                    else:
+                        room_no = room[0]
+                        days=day_count.days
+                        uid=self.user_id
+                        uid=uid[0]
+                        self.auth_login.room_booking_conform(uid,room_no,date,check_out,days)
+                        self.error_lable.config(text='Booking Done Thank You')
+                except:
+                    self.error_lable.config(text='Error In Date (Please Contact Manager)')
+        else:
+            self.error_lable.config(text='Please Select Room')
 
 root=tkinter.Tk()
 

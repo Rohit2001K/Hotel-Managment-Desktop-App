@@ -17,7 +17,8 @@ class User_actions:
         cursor.execute("SELECT uid FROM users WHERE fname=%s AND password=%s", (self.user, self.password))
         user_auth = cursor.fetchone()
         if user_auth:
-            return self.user
+            user_name=self.user
+            return user_auth,user_name
         else:
             return False
         
@@ -35,8 +36,15 @@ class User_actions:
         result=cursor.fetchall()
         return result    
 
-    def room_booking_conform(self,user,room_no):
-        cursor.execute('update rooms set available=False where room_no=%s',(room_no))
+    def room_booking_conform(self, uid, room_no, check_in_date, check_out_date, days):
+        try:
+            cursor.execute('UPDATE rooms SET available=False WHERE room_no=%s', (room_no,))
+            my_sql.commit()
+            cursor.execute('INSERT INTO bookings (uid, room_no, check_in, check_out, days) VALUES (%s, %s, %s, %s, %s)',(uid, room_no, check_in_date, check_out_date, days))
+            my_sql.commit()
+        except :
+            print("Error in inserting:")
+
 
 
 
