@@ -209,7 +209,8 @@ class login:
         self.error_lable.grid(row=8, column=2,padx=10,pady=10)
         
     def room_booking(self):
-        selected_room = self.tree.selection()  
+        selected_room = self.tree.selection() 
+        user = User_actions()
         if selected_room:
             check_out_date = self.date.get()
             check_out_month = self.month.get()
@@ -228,11 +229,13 @@ class login:
                         self.error_lable.config(text='Please Type Correct Date')
                     else:
                         room_no = room[0]
+                        price=user.price_fetch(room_no)
                         days=day_count.days
+                        price_total=(days*price)
                         uid=self.user_id
                         uid=uid[0]
-                        self.auth_login.room_booking_conform(uid,room_no,date,check_out,days)
-                        self.error_lable.config(text='Booking Done Thank You')
+                        self.auth_login.room_booking_conform(uid,room_no,date,check_out,days,price_total)
+                        self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}')
                 except:
                     self.error_lable.config(text='Error In Date (Please Contact Manager)')
         else:

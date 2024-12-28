@@ -36,15 +36,20 @@ class User_actions:
         result=cursor.fetchall()
         return result    
 
-    def room_booking_conform(self, uid, room_no, check_in_date, check_out_date, days):
+    def price_fetch(self,room_no):
+        cursor.execute('select price from rooms where room_no=%s',(room_no,))
+        result=cursor.fetchall()
+        result=result[0][0]
+        return result
+
+    def room_booking_conform(self, uid, room_no, check_in_date, check_out_date, days,price):
         try:
             cursor.execute('UPDATE rooms SET available=False WHERE room_no=%s', (room_no,))
             my_sql.commit()
-            cursor.execute('INSERT INTO bookings (uid, room_no, check_in, check_out, days) VALUES (%s, %s, %s, %s, %s)',(uid, room_no, check_in_date, check_out_date, days))
+            cursor.execute('INSERT INTO bookings (uid, room_no, check_in, check_out, days,price) VALUES (%s, %s, %s, %s, %s,%s)',(uid, room_no, check_in_date, check_out_date, days,price))
             my_sql.commit()
         except :
             print("Error in inserting:")
-
 
 
 
