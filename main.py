@@ -47,15 +47,8 @@ class login:
         result=self.auth_login.login_user()
         self.user_id=result[0]
         if result:
-            self.login_msg.config(text=f'Welcome {result[1]} ')
-            self.user.destroy()
-            self.user_lable.destroy()
-            self.password_lable.destroy()
-            self.password.destroy()
-            self.login_button.destroy()
-            self.User_create_button.destroy()
-            self.book_button=Button(self.root,text='Book Room',command=self.book_rooms)
-            self.book_button.grid(row=4, column=3, padx=10, pady=10)
+            self.user_method_screen()
+
         else:
             self.login_msg.config(text=f'Invalid username or password')
             self.user.delete(0, END)
@@ -68,6 +61,30 @@ class login:
         self.password.destroy()
         self.login_button.destroy()
         self.User_create_button.destroy()
+
+    def user_method_screen(self):
+        self.clear_screen()
+        result=self.auth_login.login_user()
+        self.user_id=result[0] 
+
+        self.welcome_msg=Label(root,text=f"Welcome {result[1]}",font=("", 25))
+        self.welcome_msg.grid(row=0, column=3,padx=10,pady=20)
+
+        self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15)
+        self.book_button.grid(row=4, column=3,padx=50)
+
+        self.account_button=Button(self.root,text='My Account ',command='',width=15)
+        self.account_button.grid(row=4, column=4)
+
+        self.order_food_button=Button(self.root,text='Order Food',command='',width=15)
+        self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
+
+
+    def user_method_screen_clear(self):
+        self.book_button.destroy()
+        self.account_button.destroy()
+        self.order_food_button.destroy()
+        self.welcome_msg.destroy()
 
     def user_creation_form_clear(self):
         self.fname.destroy()
@@ -155,8 +172,10 @@ class login:
     #After login user options
 
     def book_rooms(self):
+        self.user_method_screen_clear()
 
-        self.welcome_msg.config(text="Select Room")
+        self.welcome_msg=Label(root,text=f"Select Room",font=("", 25))
+        self.welcome_msg.grid(row=0, column=2,pady=10)
 
         self.login_msg.destroy()
         self.book_button.destroy()
@@ -208,6 +227,10 @@ class login:
         self.error_lable=Label(self.root,text='',bg='red')
         self.error_lable.grid(row=8, column=2,padx=10,pady=10)
         
+        self.back_button2=Button(self.root,text='Back',command=self.user_method_screen,width=10)
+        self.back_button2.grid(row=7, column=3)
+
+
     def room_booking(self):
         selected_room = self.tree.selection() 
         user = User_actions()
@@ -235,7 +258,8 @@ class login:
                         uid=self.user_id
                         uid=uid[0]
                         self.auth_login.room_booking_conform(uid,room_no,date,check_out,days,price_total)
-                        self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}')
+                        self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}',bg='yellow')
+                        
                 except:
                     self.error_lable.config(text='Error In Date (Please Contact Manager)')
         else:
