@@ -14,8 +14,10 @@ class login:
         self.login_form()
 
 
+#login form which take user inputs
     def login_form(self):
 
+        #clearning previous screen
         self.clear_screen()
         self.welcome_msg=Label(root,text="Welcome",font=("", 25))
         self.welcome_msg.grid(row=0, column=3,padx=10, pady=10)
@@ -39,7 +41,7 @@ class login:
         self.User_create_button=Button(self.root,text='Create account',command=self.user_creation_form)
         self.User_create_button.grid(row=5, column=3, padx=10, pady=10)
 
-
+    #main user login function
     def loginuser(self):
         username=self.user.get()
         passwd=self.password.get()
@@ -54,6 +56,7 @@ class login:
             self.user.delete(0, END)
             self.password.delete(0, END)
 
+    #clearing login screen
     def login_screen_clear(self):
         self.user.destroy()
         self.user_lable.destroy()
@@ -62,6 +65,7 @@ class login:
         self.login_button.destroy()
         self.User_create_button.destroy()
 
+    #after login,user option menu
     def user_method_screen(self):
         self.clear_screen()
         result=self.auth_login.login_user()
@@ -73,19 +77,24 @@ class login:
         self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15)
         self.book_button.grid(row=4, column=3,padx=50)
 
-        self.account_button=Button(self.root,text='My Account ',command='',width=15)
+        self.account_button=Button(self.root,text='My Account ',command=self.see_account,width=15)
         self.account_button.grid(row=4, column=4)
 
         self.order_food_button=Button(self.root,text='Order Food',command='',width=15)
         self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
 
+        self.booking_hisotry_button=Button(self.root,text='Booking History',command='',width=15)
+        self.booking_hisotry_button.grid(row=6, column=4)
 
+    #User option menu clear
     def user_method_screen_clear(self):
         self.book_button.destroy()
         self.account_button.destroy()
         self.order_food_button.destroy()
         self.welcome_msg.destroy()
+        self.booking_hisotry_button.destroy()
 
+    #sign up form clear
     def user_creation_form_clear(self):
         self.fname.destroy()
         self.fname_lable.destroy()
@@ -106,7 +115,7 @@ class login:
         self.pass2.destroy()
 
 
-
+    #User sign up form
     def user_creation_form(self):
         self.login_screen_clear()
         self.login_msg.config(text=f'Please enter you infomation')
@@ -145,6 +154,7 @@ class login:
         self.create_button=Button(self.root,text='Submit',command=self.submit_user_creation)
         self.create_button.grid(row=8, column=3, padx=10, pady=10)
 
+    #creating new user function
     def submit_user_creation(self):
         fname=self.fname.get()
         lname=self.lname.get()
@@ -163,14 +173,14 @@ class login:
         else:
             self.login_msg.config(text=f'Please Check Your Passwords')
 
+    #clear everything function
     def clear_screen(self):
         for widget in self.root.winfo_children():
             widget.destroy()        
 
 
 
-    #After login user options
-
+    #Abooking options
     def book_rooms(self):
         self.user_method_screen_clear()
 
@@ -264,6 +274,40 @@ class login:
                     self.error_lable.config(text='Error In Date (Please Contact Manager)')
         else:
             self.error_lable.config(text='Please Select Room')
+
+    def see_account(self):
+        self.user_method_screen_clear()
+        user = User_actions()
+
+        self.welcome_msg = Label(self.root, text="My Account", font=("", 25))
+        self.welcome_msg.grid(row=0, column=0,padx=20, pady=20)
+
+        uid = self.user_id
+        uid = uid[0]
+        result = user.user_account(uid)
+
+        self.fname_lable = Label(self.root, text=f'First name:-  {result[0][1]}', font=("", 15))
+        self.fname_lable.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+
+        self.lname_lable = Label(self.root, text=f'Last name:-  {result[0][2]}', font=("", 15))
+        self.lname_lable.grid(row=2, column=0, padx=10, pady=10, sticky='w')
+
+        self.mobileno_lable = Label(self.root, text=f'Mobile No:-  {result[0][3]}', font=("", 15))
+        self.mobileno_lable.grid(row=3, column=0, padx=10, pady=10, sticky='w')
+
+        self.email_lable = Label(self.root, text=f'Email:-  {result[0][5]}', font=("", 15))
+        self.email_lable.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+    
+        self.msg_lable=Label(self.root,text='Please Contact Stuff Member To Update Your Info ',bg='yellow')
+        self.msg_lable.grid(row=5, column=0, padx=10, pady=10, sticky='w')
+
+        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='green')
+        self.back_button.grid(row=6, column=0, padx=10, pady=10, sticky='w')
+
+
+
+
+
 
 root=tkinter.Tk()
 

@@ -52,6 +52,9 @@ class User_actions:
             print("Error in inserting:")
 
 
-
+    def user_account(self,uid):
+        cursor.execute('select * from users where uid=%s',(uid,))
+        result=cursor.fetchall()
+        return result
         
         
