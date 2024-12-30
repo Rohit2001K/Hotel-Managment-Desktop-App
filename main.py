@@ -65,6 +65,7 @@ class login:
         self.login_button.destroy()
         self.User_create_button.destroy()
 
+
     #after login,user option menu
     def user_method_screen(self):
         self.clear_screen()
@@ -83,7 +84,7 @@ class login:
         self.order_food_button=Button(self.root,text='Order Food',command='',width=15)
         self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
 
-        self.booking_hisotry_button=Button(self.root,text='Booking History',command='',width=15)
+        self.booking_hisotry_button=Button(self.root,text='Booking History',command=self.booking_history,width=15)
         self.booking_hisotry_button.grid(row=6, column=4)
 
     #User option menu clear
@@ -309,7 +310,38 @@ class login:
         self.back_button.grid(row=7, column=0, padx=10, pady=10, sticky='w')
 
 
+    def booking_history(self):
+        self.user_method_screen_clear()
+        user = User_actions()
+        uid = self.user_id
+        uid = uid[0]
+        result=user.user_booking_history(uid)
 
+        self.welcome_msg=Label(root,text=f"Booking History",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10)
+
+        columns = ("RoomNo.", "Check In", "Check Out","Days","Price")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
+
+        self.tree.heading("RoomNo.", text="RoomNo.")
+        self.tree.heading("Check In", text="Check In")
+        self.tree.heading("Check Out", text="Check Out")
+        self.tree.heading("Days", text="Days")
+        self.tree.heading("Price", text="Price")
+
+        self.tree.column("RoomNo.", width=80, anchor="center")
+        self.tree.column("Check In", width=100, anchor="center")
+        self.tree.column("Check Out", width=100, anchor="center")
+        self.tree.column("Days", width=80, anchor="center")
+        self.tree.column("Price", width=100, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+
+        self.tree.grid(row=2, column=1, columnspan=3,padx=10)
+        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='green')
+        self.back_button.grid(row=5,column=1,padx=10,pady=15, sticky='w')
 
 
 

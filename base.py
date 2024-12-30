@@ -72,7 +72,11 @@ class User_actions:
 
         return total_room_price   
         
-      
+    
+    def user_booking_history(self,uid):
+        cursor.execute('select room_no,check_in,check_out,days,price from bookings where uid=%s',(uid,))
+        result=cursor.fetchall()
+        return result
 
 
 
