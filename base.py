@@ -52,9 +52,27 @@ class User_actions:
             print("Error in inserting:")
 
 
+
     def user_account(self,uid):
         cursor.execute('select * from users where uid=%s',(uid,))
         result=cursor.fetchall()
         return result
         
+    def user_spends(self,uid):
+        #room booking total 
+        cursor.execute('select price from bookings where uid=%s',(uid,))   
+        room_booking_price=cursor.fetchall()
+        total_room_price=0
+        for i in room_booking_price:
+            for j in i:
+                total_room_price+=int(j)
+
+        #food total
+
+
+        return total_room_price   
         
+      
+
+
+

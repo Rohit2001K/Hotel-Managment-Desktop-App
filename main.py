@@ -285,6 +285,7 @@ class login:
         uid = self.user_id
         uid = uid[0]
         result = user.user_account(uid)
+        total_spend=user.user_spends(uid)
 
         self.fname_lable = Label(self.root, text=f'First name:-  {result[0][1]}', font=("", 15))
         self.fname_lable.grid(row=1, column=0, padx=10, pady=10, sticky='w')
@@ -297,12 +298,15 @@ class login:
 
         self.email_lable = Label(self.root, text=f'Email:-  {result[0][5]}', font=("", 15))
         self.email_lable.grid(row=4, column=0, padx=10, pady=10, sticky='w')
-    
+
+        self.total_spend_lable = Label(self.root, text=f'Totel Spends :-  Rs.{total_spend}', font=("", 15))
+        self.total_spend_lable.grid(row=5, column=0, padx=10, pady=10, sticky='w')
+
         self.msg_lable=Label(self.root,text='Please Contact Stuff Member To Update Your Info ',bg='yellow')
-        self.msg_lable.grid(row=5, column=0, padx=10, pady=10, sticky='w')
+        self.msg_lable.grid(row=6, column=0, padx=10, pady=10, sticky='w')
 
         self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='green')
-        self.back_button.grid(row=6, column=0, padx=10, pady=10, sticky='w')
+        self.back_button.grid(row=7, column=0, padx=10, pady=10, sticky='w')
 
 
 
