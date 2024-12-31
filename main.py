@@ -25,36 +25,39 @@ class login:
         self.login_msg.grid(row=1, column=3, padx=10, pady=10)
 
         #userid and password
-        self.user_lable=Label(self.root,text="UserName")
+        self.user_lable=Label(self.root,text="UserName : ",font=("Arial", 10, "bold"))
         self.user_lable.grid(row=2, column=2, padx=10, pady=0)
-        self.user=Entry(self.root,width=30)
+        self.user=Entry(self.root,width=30,bg='#E3F2FD')
         self.user.grid(row=2, column=3, padx=10, pady=10)
 
-        self.password_lable=Label(self.root,text="Password")
+        self.password_lable=Label(self.root,text="Password : ",font=("Arial", 10, "bold"))
         self.password_lable.grid(row=3, column=2, padx=10, pady=0)
-        self.password=Entry(self.root,width=30)
+        self.password=Entry(self.root,width=30,bg='#E3F2FD')
         self.password.grid(row=3, column=3, padx=10, pady=10)
 
-        self.login_button=Button(self.root,text='Login',command=self.loginuser)
+        self.login_button=Button(self.root,text='Login',command=self.loginuser,width=30,bg='#ADD8E6')
         self.login_button.grid(row=4, column=3, padx=10, pady=10)
 
-        self.User_create_button=Button(self.root,text='Create account',command=self.user_creation_form)
+        self.User_create_button=Button(self.root,text='Create account',command=self.user_creation_form,width=30,bg='#ADD8E6')
         self.User_create_button.grid(row=5, column=3, padx=10, pady=10)
 
     #main user login function
     def loginuser(self):
         username=self.user.get()
         passwd=self.password.get()
-        self.auth_login=User_actions(username,passwd)
-        result=self.auth_login.login_user()
-        self.user_id=result[0]
-        if result:
-            self.user_method_screen()
-
+        if not username or not passwd:
+            self.login_msg.config(text=f'Enter Info')
         else:
-            self.login_msg.config(text=f'Invalid username or password')
-            self.user.delete(0, END)
-            self.password.delete(0, END)
+            self.auth_login=User_actions(username,passwd)
+            result=self.auth_login.login_user()
+            self.user_id=result[0]
+            if result:
+                self.user_method_screen()
+
+            else:
+                self.login_msg.config(text=f'Invalid username or password')
+                self.user.delete(0, END)
+                self.password.delete(0, END)
 
     #clearing login screen
     def login_screen_clear(self):
@@ -75,16 +78,16 @@ class login:
         self.welcome_msg=Label(root,text=f"Welcome {result[1]}",font=("", 25))
         self.welcome_msg.grid(row=0, column=3,padx=10,pady=20)
 
-        self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15)
+        self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.book_button.grid(row=4, column=3,padx=50)
 
-        self.account_button=Button(self.root,text='My Account ',command=self.see_account,width=15)
+        self.account_button=Button(self.root,text='My Account ',command=self.see_account,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.account_button.grid(row=4, column=4)
 
-        self.order_food_button=Button(self.root,text='Order Food',command='',width=15)
+        self.order_food_button=Button(self.root,text='Order Food',command='',width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
 
-        self.booking_hisotry_button=Button(self.root,text='Booking History',command=self.booking_history,width=15)
+        self.booking_hisotry_button=Button(self.root,text='Booking History',command=self.booking_history,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.booking_hisotry_button.grid(row=6, column=4)
 
     #User option menu clear
@@ -122,38 +125,41 @@ class login:
         self.login_msg.config(text=f'Please enter you infomation')
         self.welcome_msg.config(text='Account Creation')
         #lables and entries
-        self.fname_lable=Label(self.root,text="First Name :")
+        self.fname_lable=Label(self.root,text="First Name :",font=("Arial", 10, "bold"))
         self.fname_lable.grid(row=2, column=2, padx=10, pady=0)
-        self.fname=Entry(self.root,width=30)
+        self.fname=Entry(self.root,width=30,bg='#E3F2FD')
         self.fname.grid(row=2, column=3, padx=10, pady=10)
 
-        self.lname_lable=Label(self.root,text="Last Name :")
+        self.lname_lable=Label(self.root,text="Last Name :",font=("Arial", 10, "bold"))
         self.lname_lable.grid(row=3, column=2, padx=10, pady=0)
-        self.lname=Entry(self.root,width=30)
+        self.lname=Entry(self.root,width=30,bg='#E3F2FD')
         self.lname.grid(row=3, column=3, padx=10, pady=10)
 
-        self.mobile_lable=Label(self.root,text="Mobile Number :")
+        self.mobile_lable=Label(self.root,text="Mobile Number :",font=("Arial", 10, "bold"))
         self.mobile_lable.grid(row=4, column=2, padx=10, pady=0)
-        self.mobile=Entry(self.root,width=30)
+        self.mobile=Entry(self.root,width=30,bg='#E3F2FD')
         self.mobile.grid(row=4, column=3, padx=10, pady=10)
 
-        self.email_lable=Label(self.root,text="Email :")
+        self.email_lable=Label(self.root,text="Email :",font=("Arial", 10, "bold"))
         self.email_lable.grid(row=5, column=2, padx=10, pady=0)
-        self.email=Entry(self.root,width=30)
+        self.email=Entry(self.root,width=30,bg='#E3F2FD')
         self.email.grid(row=5, column=3, padx=10, pady=10)
 
-        self.pass1_lable=Label(self.root,text="Password :")
+        self.pass1_lable=Label(self.root,text="Password :",font=("Arial", 10, "bold"))
         self.pass1_lable.grid(row=6, column=2, padx=10, pady=0)
-        self.pass1=Entry(self.root,width=30)
+        self.pass1=Entry(self.root,width=30,bg='#E3F2FD')
         self.pass1.grid(row=6, column=3, padx=10, pady=10)
 
-        self.pass2_lable=Label(self.root,text="Confirm Password :")
+        self.pass2_lable=Label(self.root,text="Confirm Password :",font=("Arial", 10, "bold"))
         self.pass2_lable.grid(row=7, column=2, padx=10, pady=0)
-        self.pass2=Entry(self.root,width=30)
+        self.pass2=Entry(self.root,width=30,bg='#E3F2FD')
         self.pass2.grid(row=7, column=3, padx=10, pady=10)
 
-        self.create_button=Button(self.root,text='Submit',command=self.submit_user_creation)
+        self.create_button=Button(self.root,text='Submit',command=self.submit_user_creation,width=30,bg='#4CAF50')
         self.create_button.grid(row=8, column=3, padx=10, pady=10)
+
+        self.back_button=Button(self.root,text='Back',command=self.login_form,width=30,bg='#9E9E9E')
+        self.back_button.grid(row=9, column=3, padx=10, pady=10)
 
     #creating new user function
     def submit_user_creation(self):
@@ -161,18 +167,24 @@ class login:
         lname=self.lname.get()
         mobile=self.mobile.get()
         email=self.email.get()
-        if self.pass1.get()==self.pass2.get():
-            password=self.pass1.get()
-            user=User_actions()
-            result=user.create_user(fname,lname,mobile,email,password)
-            if result:
-                self.user_creation_form_clear()
-                self.login_msg.config(text=f'Account Created')
-                self.back_button=Button(self.root,text='Back To Login',command=self.login_form)
-                self.back_button.grid(row=4, column=3, padx=10, pady=10)
-                
+        pass1=self.pass1.get()
+        pass2=self.pass2.get()
+        if not fname or not lname or not mobile or not email or not pass1 or not pass2:
+            self.login_msg.config(text='Please fill in all the details.')
         else:
-            self.login_msg.config(text=f'Please Check Your Passwords')
+            if pass1==pass2:
+                password=self.pass1.get()
+                user=User_actions()
+                result=user.create_user(fname,lname,mobile,email,password)
+                if result:
+                    self.user_creation_form_clear()
+                    self.back_button.destroy()
+                    self.login_msg.config(text=f'Account Created')
+                    self.back_button=Button(self.root,text='Back To Login',command=self.login_form,bg='#4CAF50')
+                    self.back_button.grid(row=4, column=3, padx=10, pady=10)
+                
+            else:
+                self.login_msg.config(text=f'Please Check Your Passwords')
 
     #clear everything function
     def clear_screen(self):
@@ -232,13 +244,13 @@ class login:
 
 
 
-        self.room_book_button=Button(self.root,text='Book Room', command=self.room_booking)
+        self.room_book_button=Button(self.root,text='Book Room',width=20,bg='#4CAF50',fg="white", command=self.room_booking)
         self.room_book_button.grid(row=7, column=2,padx=10,pady=10)
 
         self.error_lable=Label(self.root,text='',bg='red')
         self.error_lable.grid(row=8, column=2,padx=10,pady=10)
         
-        self.back_button2=Button(self.root,text='Back',command=self.user_method_screen,width=10)
+        self.back_button2=Button(self.root,text='Back',command=self.user_method_screen,width=20,bg='#9E9E9E')
         self.back_button2.grid(row=7, column=3)
 
 
@@ -249,30 +261,33 @@ class login:
             check_out_date = self.date.get()
             check_out_month = self.month.get()
             check_out_year = self.year.get() 
-            if selected_room:
-                room=self.tree.item(selected_room, "values")
-                try:
-                    check_out_date=int(check_out_date)
-                    check_out_month=int(check_out_month)
-                    check_out_year=int(check_out_year)
-                    date=datetime.date.today()
-                    check_out=datetime.date(check_out_year, check_out_month, check_out_date)
-                    day_count=check_out-date
-                    days=day_count.days
-                    if days<0:
-                        self.error_lable.config(text='Please Type Correct Date')
-                    else:
-                        room_no = room[0]
-                        price=user.price_fetch(room_no)
+            if not check_out_date or not check_out_month or not check_out_year:
+                self.error_lable.config(text='Please Enter Check Out Date')
+            else:
+                if selected_room:
+                    room=self.tree.item(selected_room, "values")
+                    try:
+                        check_out_date=int(check_out_date)
+                        check_out_month=int(check_out_month)
+                        check_out_year=int(check_out_year)
+                        date=datetime.date.today()
+                        check_out=datetime.date(check_out_year, check_out_month, check_out_date)
+                        day_count=check_out-date
                         days=day_count.days
-                        price_total=(days*price)
-                        uid=self.user_id
-                        uid=uid[0]
-                        self.auth_login.room_booking_conform(uid,room_no,date,check_out,days,price_total)
-                        self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}',bg='yellow')
+                        if days<0:
+                            self.error_lable.config(text='Please Enter Correct Date')
+                        else:
+                            room_no = room[0]
+                            price=user.price_fetch(room_no)
+                            days=day_count.days
+                            price_total=(days*price)
+                            uid=self.user_id
+                            uid=uid[0]
+                            self.auth_login.room_booking_conform(uid,room_no,date,check_out,days,price_total)
+                            self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}',bg='yellow')
                         
-                except:
-                    self.error_lable.config(text='Error In Date (Please Contact Manager)')
+                    except:
+                        self.error_lable.config(text='Error In Date (Please Contact Manager)')
         else:
             self.error_lable.config(text='Please Select Room')
 
@@ -306,7 +321,7 @@ class login:
         self.msg_lable=Label(self.root,text='Please Contact Stuff Member To Update Your Info ',bg='yellow')
         self.msg_lable.grid(row=6, column=0, padx=10, pady=10, sticky='w')
 
-        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='green')
+        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='#9E9E9E')
         self.back_button.grid(row=7, column=0, padx=10, pady=10, sticky='w')
 
 
@@ -340,7 +355,7 @@ class login:
 
 
         self.tree.grid(row=2, column=1, columnspan=3,padx=10)
-        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='green')
+        self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='#9E9E9E')
         self.back_button.grid(row=5,column=1,padx=10,pady=15, sticky='w')
 
 
