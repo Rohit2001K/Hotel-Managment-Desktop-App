@@ -14,11 +14,10 @@ class User_actions:
         self.password = password
 
     def login_user(self):
-        cursor.execute("SELECT uid FROM users WHERE fname=%s AND password=%s", (self.user, self.password))
-        user_auth = cursor.fetchone()
+        cursor.execute("SELECT * FROM users WHERE email=%s AND password=%s", (self.user, self.password))
+        user_auth = cursor.fetchall()
         if user_auth:
-            user_name=self.user
-            return user_auth,user_name
+            return user_auth
         else:
             return False
         
@@ -42,25 +41,25 @@ class User_actions:
         result=result[0][0]
         return result
 
-    def room_booking_conform(self, uid, room_no, check_in_date, check_out_date, days,price):
+    def room_booking_conform(self,email, room_no, check_in_date, check_out_date, days,price):
         try:
             cursor.execute('UPDATE rooms SET available=False WHERE room_no=%s', (room_no,))
             my_sql.commit()
-            cursor.execute('INSERT INTO bookings (uid, room_no, check_in, check_out, days,price) VALUES (%s, %s, %s, %s, %s,%s)',(uid, room_no, check_in_date, check_out_date, days,price))
+            cursor.execute('INSERT INTO bookings (email, room_no, check_in, check_out, days,price) VALUES (%s, %s, %s, %s, %s,%s)',(email, room_no, check_in_date, check_out_date, days,price))
             my_sql.commit()
         except :
             print("Error in inserting:")
 
 
 
-    def user_account(self,uid):
-        cursor.execute('select * from users where uid=%s',(uid,))
+    def user_account(self,email):
+        cursor.execute('select * from users where email=%s',(email,))
         result=cursor.fetchall()
         return result
         
-    def user_spends(self,uid):
+    def user_spends(self,email):
         #room booking total 
-        cursor.execute('select price from bookings where uid=%s',(uid,))   
+        cursor.execute('select price from bookings where email=%s',(email,))   
         room_booking_price=cursor.fetchall()
         total_room_price=0
         for i in room_booking_price:
@@ -73,8 +72,8 @@ class User_actions:
         return total_room_price   
         
     
-    def user_booking_history(self,uid):
-        cursor.execute('select room_no,check_in,check_out,days,price from bookings where uid=%s',(uid,))
+    def user_booking_history(self,email):
+        cursor.execute('select room_no,check_in,check_out,days,price from bookings where email=%s',(email,))
         result=cursor.fetchall()
         return result
 

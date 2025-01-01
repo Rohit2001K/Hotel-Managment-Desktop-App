@@ -21,14 +21,14 @@ class login:
         self.clear_screen()
         self.welcome_msg=Label(root,text="Welcome",font=("", 25))
         self.welcome_msg.grid(row=0, column=3,padx=10, pady=10)
-        self.login_msg=Label(root,text="Please Enter Your UserID And Password Below")
+        self.login_msg=Label(root,text="Please Enter Your Email And Password Below")
         self.login_msg.grid(row=1, column=3, padx=10, pady=10)
 
         #userid and password
-        self.user_lable=Label(self.root,text="UserName : ",font=("Arial", 10, "bold"))
-        self.user_lable.grid(row=2, column=2, padx=10, pady=0)
-        self.user=Entry(self.root,width=30,bg='#E3F2FD')
-        self.user.grid(row=2, column=3, padx=10, pady=10)
+        self.user_email_lable=Label(self.root,text="Email : ",font=("Arial", 10, "bold"))
+        self.user_email_lable.grid(row=2, column=2, padx=10, pady=0)
+        self.user_email=Entry(self.root,width=30,bg='#E3F2FD')
+        self.user_email.grid(row=2, column=3, padx=10, pady=10)
 
         self.password_lable=Label(self.root,text="Password : ",font=("Arial", 10, "bold"))
         self.password_lable.grid(row=3, column=2, padx=10, pady=0)
@@ -43,14 +43,15 @@ class login:
 
     #main user login function
     def loginuser(self):
-        username=self.user.get()
+        email=self.user_email.get()
         passwd=self.password.get()
-        if not username or not passwd:
+        if not email or not passwd:
             self.login_msg.config(text=f'Enter Info')
         else:
-            self.auth_login=User_actions(username,passwd)
+            self.auth_login=User_actions(email,passwd)
             result=self.auth_login.login_user()
-            self.user_id=result[0]
+            self.user_name=result[0][1]
+            self.user_email=email
             if result:
                 self.user_method_screen()
 
@@ -73,9 +74,8 @@ class login:
     def user_method_screen(self):
         self.clear_screen()
         result=self.auth_login.login_user()
-        self.user_id=result[0] 
-
-        self.welcome_msg=Label(root,text=f"Welcome {result[1]}",font=("", 25))
+        user_name=self.user_name
+        self.welcome_msg=Label(root,text=f"Welcome {user_name}",font=("", 25))
         self.welcome_msg.grid(row=0, column=3,padx=10,pady=20)
 
         self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
@@ -281,9 +281,8 @@ class login:
                             price=user.price_fetch(room_no)
                             days=day_count.days
                             price_total=(days*price)
-                            uid=self.user_id
-                            uid=uid[0]
-                            self.auth_login.room_booking_conform(uid,room_no,date,check_out,days,price_total)
+                            email=self.user_email
+                            self.auth_login.room_booking_conform(email,room_no,date,check_out,days,price_total)
                             self.error_lable.config(text=f'Booking Done Thank You, Total Price= {price_total}',bg='yellow')
                         
                     except:
@@ -293,15 +292,11 @@ class login:
 
     def see_account(self):
         self.user_method_screen_clear()
-        user = User_actions()
-
         self.welcome_msg = Label(self.root, text="My Account", font=("", 25))
         self.welcome_msg.grid(row=0, column=0,padx=20, pady=20)
-
-        uid = self.user_id
-        uid = uid[0]
-        result = user.user_account(uid)
-        total_spend=user.user_spends(uid)
+        user=User_actions()
+        result=user.user_account(self.user_email)
+        total_spend=user.user_spends(self.user_email)
 
         self.fname_lable = Label(self.root, text=f'First name:-  {result[0][1]}', font=("", 15))
         self.fname_lable.grid(row=1, column=0, padx=10, pady=10, sticky='w')
@@ -327,10 +322,8 @@ class login:
 
     def booking_history(self):
         self.user_method_screen_clear()
-        user = User_actions()
-        uid = self.user_id
-        uid = uid[0]
-        result=user.user_booking_history(uid)
+        user=User_actions()
+        result=user.user_booking_history(self.user_email)
 
         self.welcome_msg=Label(root,text=f"Booking History",font=("", 25))
         self.welcome_msg.grid(row=0, column=1,pady=10)

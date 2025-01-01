@@ -21,13 +21,13 @@ CREATE TABLE Users (
 
 CREATE TABLE Bookings (
     booking_id INT PRIMARY KEY AUTO_INCREMENT, 
-    uid INT, 
+    email varchar(50) NOT NULL,
     room_no INT,
     check_in DATE NOT NULL,
     check_out DATE NOT NULL,
     days int NOT NULL,
     price int NOT NULL,
-    FOREIGN KEY (uid) REFERENCES Users(uid), 
+    FOREIGN KEY (email) REFERENCES Users(email), 
     FOREIGN KEY (room_no) REFERENCES Rooms(room_no),
     CONSTRAINT room_availability CHECK (check_in < check_out), 
     CONSTRAINT unique_booking UNIQUE (room_no, check_in) 
