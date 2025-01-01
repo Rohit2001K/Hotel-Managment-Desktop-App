@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
-from base import User_actions
+from files.base import User_actions
+from files.staff import Staff
 from tkinter import ttk
 import datetime
 
@@ -43,27 +44,44 @@ class login:
 
     #main user login function
     def loginuser(self):
-        email=self.user_email.get()
-        passwd=self.password.get()
+        email = self.user_email.get()  
+        passwd = self.password.get()  
+    
         if not email or not passwd:
             self.login_msg.config(text=f'Enter Info')
         else:
-            self.auth_login=User_actions(email,passwd)
-            result=self.auth_login.login_user()
-            self.user_name=result[0][1]
-            self.user_email=email
-            if result:
-                self.user_method_screen()
-
-            else:
+            self.auth_login = User_actions(email, passwd)  
+            result = self.auth_login.login_user() 
+            if result==False:
                 self.login_msg.config(text=f'Invalid username or password')
-                self.user.delete(0, END)
+                self.user_email.delete(0, END) 
                 self.password.delete(0, END)
+
+            elif result[0][4]==True: 
+                self.show_staff_dashboard()
+
+            else: 
+                self.user_name = result[0][1]  
+                self.user_email = email  
+                self.user_method_screen()  
+            
+                
+
+    #if user is staff member then show this
+    def show_staff_dashboard(self):
+        self.user_email.delete(0, END) 
+        self.password.delete(0, END)
+        staff_window = Toplevel(self.root)  
+        staff_app = Staff(staff_window, self.user_email) 
+        staff_window.mainloop()
+
+    
+
 
     #clearing login screen
     def login_screen_clear(self):
-        self.user.destroy()
-        self.user_lable.destroy()
+        self.user_email.destroy()
+        self.user_email_lable.destroy()
         self.password_lable.destroy()
         self.password.destroy()
         self.login_button.destroy()
@@ -350,6 +368,13 @@ class login:
         self.tree.grid(row=2, column=1, columnspan=3,padx=10)
         self.back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='#9E9E9E')
         self.back_button.grid(row=5,column=1,padx=10,pady=15, sticky='w')
+
+
+
+
+
+
+
 
 
 
