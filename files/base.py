@@ -1,8 +1,6 @@
 import mysql.connector as ms
 
-
-
-my_sql=ms.connect(host='localhost',user='root',passwd='1030',database='test')
+my_sql=ms.connect(host='localhost',user='',passwd='',database='test')
 if my_sql.is_connected():
     cursor=my_sql.cursor()
 
@@ -20,6 +18,8 @@ class User_actions:
             return user_auth
         else:
             return False
+
+
         
     def create_user(self,fname,lname,mno,email,password):
         try:
@@ -70,12 +70,42 @@ class User_actions:
 
 
         return total_room_price   
-        
     
     def user_booking_history(self,email):
         cursor.execute('select room_no,check_in,check_out,days,price from bookings where email=%s',(email,))
         result=cursor.fetchall()
         return result
 
+
+#staff dashboard
+class Staff_action:
+    def __init__(self,email):
+        self.email=email
+
+    def staff_info(self):
+        cursor.execute('SELECT fname FROM users where email=%s',(self.email,))
+        result=cursor.fetchone()
+        return result[0]
+
+    def current_bookings(self):
+        cursor.execute('SELECT * FROM bookings where check_out_status!="Completed"')
+        result = cursor.fetchall()
+        return result
+
+    def booking_history(self):
+        cursor.execute('SELECT * FROM bookings where check_out_status="Completed"')
+        result = cursor.fetchall()
+        return result
+
+    def check_out(self,id,room_no):
+        try:
+            cursor.execute('update bookings set check_out_status="Completed" where booking_id=%s',(id,))
+            cursor.execute('update rooms set available=True where room_no=%s',(room_no,))
+            my_sql.commit()
+            return True
+        except Exception as e:
+            my_sql.rollback()  # Rollback the transaction in case of an error
+            print(f"Error occurred: {e}")
+            return False
 
 

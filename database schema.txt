@@ -27,6 +27,7 @@ CREATE TABLE Bookings (
     check_out DATE NOT NULL,
     days int NOT NULL,
     price int NOT NULL,
+    check_out_status VARCHAR(20) DEFAULT 'Pending'
     FOREIGN KEY (email) REFERENCES Users(email), 
     FOREIGN KEY (room_no) REFERENCES Rooms(room_no),
     CONSTRAINT room_availability CHECK (check_in < check_out), 

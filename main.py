@@ -6,7 +6,7 @@ from tkinter import ttk
 import datetime
 
 
-class login:
+class Hotel:
     def __init__(self,root):
         #basic config
         self.root=root
@@ -380,5 +380,5 @@ class login:
 
 root=tkinter.Tk()
 
-hotel=login(root)
+hotel=Hotel(root)
 root.mainloop()
