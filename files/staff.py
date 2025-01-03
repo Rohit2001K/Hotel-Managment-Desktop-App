@@ -26,7 +26,7 @@ class Staff:
         self.account_updation_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
 
-        self.food_list_button = Button(self.root, text='List New Food Iteam', command='', width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.food_list_button = Button(self.root, text='Food Iteams', command=self.list_food_iteam, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
         self.food_list_button.grid(row=2, column=0, padx=20, pady=10, sticky="w")
 
         self.food_requst_button = Button(self.root, text='User Food Requests', command='', width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
@@ -135,8 +135,69 @@ class Staff:
         self.back_button.grid(row=6, column=1,padx=10,pady=20,sticky="w")
 
 
+    def list_food_iteam(self):
+        self.clear_screen()
+        staff=self.user
+        result=staff.show_food_items()
+
+        self.welcome_msg=Label(root,text=f"Food Items",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10,padx=10)
+
+        columns = ("Id","Name","Price", "Availability")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
+        self.tree.heading("Id", text="Id")
+        self.tree.heading("Name", text="Name")
+        self.tree.heading("Price", text="Price")
+        self.tree.heading("Availability", text="Availability")
+
+        self.tree.column("Id", width=40, anchor="center")
+        self.tree.column("Name", width=100, anchor="center")
+        self.tree.column("Price", width=50, anchor="center")
+        self.tree.column("Availability", width=100, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+        self.tree.grid(row=2, column=1, columnspan=3,padx=10)
+
+        self.food_item_msg=Label(self.root,text='Add New Iteam (Fill Below Details)',bg='yellow')
+        self.food_item_msg.grid(row=3,column=1,padx=10,pady=10)
+
+        food_name_lable=Label(self.root,text='Food Name : ')
+        food_name_lable.grid(row=4,column=1,padx=10)
+
+        self.food_name=Entry(self.root,width=30)
+        self.food_name.grid(row=4,column=2,padx=10)
+
+        food_price_lable=Label(self.root,text='Price : ')
+        food_price_lable.grid(row=5,column=1)
+
+        self.food_price=Entry(self.root,width=30)
+        self.food_price.grid(row=5,column=2)
+
+        list_new_item=Button(self.root, text='Add New Iteam', command=self.add_new_item, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        list_new_item.grid(row=6, column=1,padx=10,pady=20,sticky="w")
+
+        self.back_button=Button(self.root, text='Back', command=self.staff_dashboard, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        self.back_button.grid(row=6, column=2,padx=10,pady=20,sticky="w")
+
+    def add_new_item(self):
+        staff=self.user
+
+        food_name=self.food_name.get()
+        food_price=self.food_price.get()
+
+        if not food_name or not food_price:
+            self.food_item_msg.config(text='Please Enter Food Name And Price')
+        else:
+            action=staff.list_new_item(food_name,food_price)
+            if action==False:
+                self.food_item_msg.config(text='Please Re Check The Name And Price')
+            else:
+                self.food_item_msg.config(text='New Iteam Listed')
 
 
+        
 
 
 root=tkinter.Tk()

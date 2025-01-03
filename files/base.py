@@ -109,3 +109,15 @@ class Staff_action:
             return False
 
 
+    def show_food_items(self):
+        cursor.execute('select * from food_items')
+        result=cursor.fetchall()
+        return result
+    
+    def list_new_item(self,name,price):
+        try:
+            cursor.execute('insert into food_items (name,price) values (%s,%s)',(name,price,))
+            my_sql.commit()
+            return True
+        except:
+            return False

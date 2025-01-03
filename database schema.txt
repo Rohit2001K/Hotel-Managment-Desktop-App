@@ -33,3 +33,10 @@ CREATE TABLE Bookings (
     CONSTRAINT room_availability CHECK (check_in < check_out), 
     CONSTRAINT unique_booking UNIQUE (room_no, check_in) 
 );
+
+
+CREATE TABLE food_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    availability varchar(20) DEFAULT 'available');
