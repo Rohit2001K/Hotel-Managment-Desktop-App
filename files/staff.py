@@ -158,28 +158,37 @@ class Staff:
         for row in result:
             self.tree.insert("", "end", values=row)
 
-        self.tree.grid(row=2, column=1, columnspan=3,padx=10)
+        self.tree.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
 
-        self.food_item_msg=Label(self.root,text='Add New Iteam (Fill Below Details)',bg='yellow')
-        self.food_item_msg.grid(row=3,column=1,padx=10,pady=10)
+        self.food_item_msg = Label(self.root, text='Add New Item (Fill Below Details)', bg='yellow')
+        self.food_item_msg.grid(row=3, column=1, padx=10, pady=10, columnspan=3)
 
-        food_name_lable=Label(self.root,text='Food Name : ')
-        food_name_lable.grid(row=4,column=1,padx=10)
+        food_name_label = Label(self.root, text='Food Name: ')
+        food_name_label.grid(row=4, column=1, padx=10, pady=5, sticky="e")
 
-        self.food_name=Entry(self.root,width=30)
-        self.food_name.grid(row=4,column=2,padx=10)
+        self.food_name = Entry(self.root, width=30)
+        self.food_name.grid(row=4, column=2, padx=10, pady=5)
 
-        food_price_lable=Label(self.root,text='Price : ')
-        food_price_lable.grid(row=5,column=1)
+        food_price_label = Label(self.root, text='Price: ')
+        food_price_label.grid(row=5, column=1, padx=10, sticky="e")
 
-        self.food_price=Entry(self.root,width=30)
-        self.food_price.grid(row=5,column=2)
+        self.food_price = Entry(self.root, width=30)
+        self.food_price.grid(row=5, column=2, padx=10)
 
-        list_new_item=Button(self.root, text='Add New Iteam', command=self.add_new_item, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
-        list_new_item.grid(row=6, column=1,padx=10,pady=20,sticky="w")
+        list_new_item = Button(self.root, text='Add New Item', command=self.add_new_item, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        list_new_item.grid(row=6, column=1, padx=10, pady=20, sticky="w")
 
-        self.back_button=Button(self.root, text='Back', command=self.staff_dashboard, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
-        self.back_button.grid(row=6, column=2,padx=10,pady=20,sticky="w")
+        back_button = Button(self.root, text='Back', command=self.staff_dashboard, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        back_button.grid(row=6, column=2, padx=10, pady=20, sticky="w")
+
+        self.food_item_msg2 = Label(self.root, text='Want To Change Availability Of Above Item? Select And Click Below Button', bg='yellow')
+        self.food_item_msg2.grid(row=7, column=1, padx=10, pady=10, columnspan=3)
+
+        make_available_button = Button(self.root, text='Make Item Available', command=lambda: self.change_item_availability('available'), width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        make_available_button.grid(row=8, column=1, padx=10)
+
+        make_out_of_stock_button = Button(self.root, text='Make Item Out Of Stock', command=lambda: self.change_item_availability('out of stock'), width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        make_out_of_stock_button.grid(row=8, column=2, padx=10)
 
     def add_new_item(self):
         staff=self.user
@@ -197,7 +206,20 @@ class Staff:
                 self.food_item_msg.config(text='New Iteam Listed')
 
 
+    def change_item_availability(self,status):
+        staff=self.user
+        selected_item=self.tree.selection() 
+        if selected_item:
+            selected_item=self.tree.item(selected_item, "values")
+            food_name=selected_item[1]
+            action=staff.food_item_status(status,food_name)
+            if not action:
+                self.food_item_msg2.config(text="ERROR Please Contact Admin")
+            else:
+                self.food_item_msg2.config(text="Food Item Availability Status Updated, Please Go Back And Come Back Again")
         
+        else:
+            self.food_item_msg2.config(text="Plese Select Food Item Fist Before Changing Availability Status")
 
 
 root=tkinter.Tk()

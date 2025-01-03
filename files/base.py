@@ -121,3 +121,12 @@ class Staff_action:
             return True
         except:
             return False
+    
+    def food_item_status(self,status,name):
+        try:
+            cursor.execute('UPDATE food_items SET availability = %s WHERE name = %s', (status, name))
+            my_sql.commit()
+            return True
+        except:
+            return False
+
