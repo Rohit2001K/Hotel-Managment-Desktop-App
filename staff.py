@@ -1,7 +1,7 @@
 import tkinter
 from tkinter import *
 from tkinter import ttk
-from base import Staff_action
+from files.base import Staff_action
 
 class Staff:
     def __init__(self, root, email):
@@ -44,7 +44,7 @@ class Staff:
         staff=self.user
         result=staff.current_bookings()
 
-        self.welcome_msg=Label(root,text=f"Current Booking",font=("", 25))
+        self.welcome_msg=Label(self.root,text=f"Current Booking",font=("", 25))
         self.welcome_msg.grid(row=0, column=1,pady=10)
 
         columns = ("Id","Email","RoomNo.", "Check In", "Check Out","Days","Price","Check Out Status")
@@ -100,7 +100,7 @@ class Staff:
         staff=self.user
         result=staff.booking_history()
 
-        self.welcome_msg=Label(root,text=f"Previous Bookings",font=("", 25))
+        self.welcome_msg=Label(self.root,text=f"Previous Bookings",font=("", 25))
         self.welcome_msg.grid(row=0, column=1,pady=10)
 
         columns = ("Id","Email","RoomNo.", "Check In", "Check Out","Days","Price","Check Out Status")
@@ -140,7 +140,7 @@ class Staff:
         staff=self.user
         result=staff.show_food_items()
 
-        self.welcome_msg=Label(root,text=f"Food Items",font=("", 25))
+        self.welcome_msg=Label(self.root,text=f"Food Items",font=("", 25))
         self.welcome_msg.grid(row=0, column=1,pady=10,padx=10)
 
         columns = ("Id","Name","Price", "Availability")
@@ -222,6 +222,6 @@ class Staff:
             self.food_item_msg2.config(text="Plese Select Food Item Fist Before Changing Availability Status")
 
 
-root=tkinter.Tk()
-hotel=Staff(root,'motel@stuff.come')
-root.mainloop()
+#root=tkinter.Tk()
+#hotel=Staff(root,'motel@stuff.come')
+#root.mainloop()

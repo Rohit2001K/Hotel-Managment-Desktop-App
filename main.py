@@ -1,10 +1,9 @@
 import tkinter
 from tkinter import *
-from files.base import User_actions
-from files.staff import Staff
+from files.base import User_actions,Staff_action
 from tkinter import ttk
 import datetime
-
+from staff import Staff
 
 class Hotel:
     def __init__(self,root):
@@ -44,13 +43,13 @@ class Hotel:
 
     #main user login function
     def loginuser(self):
-        email = self.user_email.get()  
+        self.email = self.user_email.get()  
         passwd = self.password.get()  
     
-        if not email or not passwd:
+        if not self.email or not passwd:
             self.login_msg.config(text=f'Enter Info')
         else:
-            self.auth_login = User_actions(email, passwd)  
+            self.auth_login = User_actions(self.email, passwd)  
             result = self.auth_login.login_user() 
             if result==False:
                 self.login_msg.config(text=f'Invalid username or password')
@@ -62,17 +61,17 @@ class Hotel:
 
             else: 
                 self.user_name = result[0][1]  
-                self.user_email = email  
+                self.user_email = self.email  
                 self.user_method_screen()  
             
                 
 
     #if user is staff member then show this
     def show_staff_dashboard(self):
-        self.user_email.delete(0, END) 
+        self.user_email.delete(0, END)
         self.password.delete(0, END)
-        staff_window = Toplevel(self.root)  
-        staff_app = Staff(staff_window, self.user_email) 
+        staff_window = Toplevel(self.root)
+        staff_app = Staff(staff_window, self.email) 
         staff_window.mainloop()
 
     
@@ -379,6 +378,5 @@ class Hotel:
 
 
 root=tkinter.Tk()
-
 hotel=Hotel(root)
 root.mainloop()
