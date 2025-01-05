@@ -101,7 +101,7 @@ class Hotel:
         self.account_button=Button(self.root,text='My Account ',command=self.see_account,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.account_button.grid(row=4, column=4)
 
-        self.order_food_button=Button(self.root,text='Order Food',command='',width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
+        self.order_food_button=Button(self.root,text='Order Food',command=self.food_order,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
         self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
 
         self.booking_hisotry_button=Button(self.root,text='Booking History',command=self.booking_history,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
@@ -369,10 +369,66 @@ class Hotel:
         self.back_button.grid(row=5,column=1,padx=10,pady=15, sticky='w')
 
 
+    def food_order(self):
+        self.user_method_screen_clear()
+        user=User_actions()
+        result=user.food_items_fetch()
+
+        self.welcome_msg=Label(root,text=f"Order Food",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10)
+
+        columns = ("tem_id","Name", "Price")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
+
+        self.tree.heading("tem_id", text="tem_id")
+        self.tree.heading("Name", text="Name")
+        self.tree.heading("Price", text="Price")
+
+        self.tree.column("tem_id", width=80, anchor="center")
+        self.tree.column("Name", width=100, anchor="center")
+        self.tree.column("Price", width=100, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+        self.tree.grid(row=2, column=1, columnspan=3,padx=10)
+
+        self.food_item_msg = Label(self.root, text='Select Your Food Item From Above', bg='yellow')
+        self.food_item_msg.grid(row=3, column=1, padx=10, pady=10, columnspan=3)
+
+        self.food_item_msg2 = Label(self.root, text='Enter Quantity :')
+        self.food_item_msg2.grid(row=4, column=1, padx=10, pady=10)
+
+        self.food_quantity = Entry(self.root, width=30)
+        self.food_quantity.grid(row=4, column=2, padx=10, pady=5)
+
+        confirm_order=Button(self.root, text='Place Order', command=self.place_order, width=30, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        confirm_order.grid(row=5, column=1, padx=10, pady=20, sticky="w")
+
+        back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='#9E9E9E')
+        back_button.grid(row=5,column=2,padx=10,pady=20, sticky='w')
+
+    def place_order(self):
+        user = User_actions()
+        selected_item = self.tree.selection()
+        if selected_item:
+            selected_item = self.tree.item(selected_item[0])
+            values = selected_item["values"]
+            food_id = values[0] 
+            food_name = values[1] 
+            quantity = self.food_quantity.get()
+            if not quantity:
+                self.food_item_msg.config(text="Please Enter No Of Quantity", bg='yellow')
+            else:
+                email = self.user_email
+                place_order = user.food_order(email, food_id, food_name, quantity)
+                if place_order:
+                    self.food_item_msg.config(text="Order Placed Successfully, Thank you", bg='green')
+                else:
+                    self.food_item_msg.config(text="ERROR WHILE PLACING ORDER", bg='red')
 
 
-
-
+            
 
 
 

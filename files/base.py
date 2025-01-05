@@ -75,6 +75,31 @@ class User_actions:
         cursor.execute('select room_no,check_in,check_out,days,price from bookings where email=%s',(email,))
         result=cursor.fetchall()
         return result
+    
+    def pending_checkout(self,email):
+        cursor.execute('select room_no from bookings where check_out_status="Pending" and email=%s',(email,))
+        result=cursor.fetchone()
+        return result
+    
+    def food_items_fetch(self):
+        cursor.execute('select * from food_items where availability="available"')
+        result=cursor.fetchall()
+        return result
+    
+    def food_order(self, email, food_id, food_name, quantity):
+        room_no = self.pending_checkout(email)
+        if room_no:
+            user = self.user_account(email)
+            user_id = user[0][0]
+            room_no = room_no[0] 
+            try:
+                cursor.execute('INSERT INTO orders (user_id, room_no, food_id, food_name, quantity) VALUES (%s, %s, %s, %s, %s)',(user_id, room_no, food_id, food_name, quantity))
+                my_sql.commit() 
+                return True
+            except: 
+                return False
+        else:
+            return False
 
 
 #staff dashboard
