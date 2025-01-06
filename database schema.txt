@@ -52,3 +52,16 @@ CREATE TABLE food_items (
     FOREIGN KEY (room_no) REFERENCES Bookings(room_no),
     FOREIGN KEY (food_id) REFERENCES food_items(item_id)
 );
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,  
+    user_id INT NOT NULL,  
+    room_no INT,                         
+    food_id INT,  
+    food_name VARCHAR(50), 
+    price DECIMAL(10, 2) NOT NULL,              
+    status VARCHAR(50) DEFAULT 'pending',                       
+    quantity INT,                         
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,                 
+    FOREIGN KEY (user_id) REFERENCES users(uid)
+);

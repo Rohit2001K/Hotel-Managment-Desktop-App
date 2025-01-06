@@ -416,16 +416,22 @@ class Hotel:
             values = selected_item["values"]
             food_id = values[0] 
             food_name = values[1] 
+            food_price=values[2]
+            float_price=float(food_price)
+            int_price=int(float_price)
             quantity = self.food_quantity.get()
             if not quantity:
                 self.food_item_msg.config(text="Please Enter No Of Quantity", bg='yellow')
             else:
                 email = self.user_email
-                place_order = user.food_order(email, food_id, food_name, quantity)
+                total_quantity=int(quantity)
+                total_price=float_price*total_quantity
+                place_order = user.food_order(email, food_id, food_name,total_price, quantity)
                 if place_order:
                     self.food_item_msg.config(text="Order Placed Successfully, Thank you", bg='green')
                 else:
-                    self.food_item_msg.config(text="ERROR WHILE PLACING ORDER", bg='red')
+                    self.food_item_msg.config(text="You don't have any active room booking", bg='red')
+                
 
 
             

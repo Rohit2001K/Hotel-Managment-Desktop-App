@@ -86,14 +86,14 @@ class User_actions:
         result=cursor.fetchall()
         return result
     
-    def food_order(self, email, food_id, food_name, quantity):
+    def food_order(self, email, food_id, food_name,price,quantity):
         room_no = self.pending_checkout(email)
         if room_no:
             user = self.user_account(email)
             user_id = user[0][0]
             room_no = room_no[0] 
             try:
-                cursor.execute('INSERT INTO orders (user_id, room_no, food_id, food_name, quantity) VALUES (%s, %s, %s, %s, %s)',(user_id, room_no, food_id, food_name, quantity))
+                cursor.execute('INSERT INTO orders (user_id, room_no, food_id, food_name, price, quantity) VALUES (%s, %s, %s, %s, %s, %s)', (user_id, room_no, food_id, food_name, price, quantity))
                 my_sql.commit() 
                 return True
             except: 
@@ -155,4 +155,15 @@ class Staff_action:
         except:
             return False
 
+    def food_req(self):
+        cursor.execute('select order_id,room_no,food_id,food_name,quantity,price,status from orders where status!="delivered"')
+        result=cursor.fetchall()
+        return result
 
+    def food_req_status(self,status,id):
+        try:
+            cursor.execute('update orders set status=%s where order_id=%s',(status,id,))
+            my_sql.commit()
+            return True
+        except:
+            return False
