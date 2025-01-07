@@ -101,6 +101,12 @@ class User_actions:
         else:
             return False
 
+    def order_status_check(self,email):
+        uid=self.user_account(email)
+        uid=uid[0][0]
+        cursor.execute('select order_id,room_no,food_name,quantity,price,status from orders where user_id=%s',(uid,))
+        result=cursor.fetchall()
+        return result
 
 #staff dashboard
 class Staff_action:

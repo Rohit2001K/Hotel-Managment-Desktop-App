@@ -45,7 +45,9 @@ class Hotel:
     def loginuser(self):
         self.email = self.user_email.get()  
         passwd = self.password.get()  
-    
+        #self.email = 'test6'
+        #passwd = 'test6'
+        
         if not self.email or not passwd:
             self.login_msg.config(text=f'Enter Info')
         else:
@@ -90,22 +92,41 @@ class Hotel:
     #after login,user option menu
     def user_method_screen(self):
         self.clear_screen()
-        result=self.auth_login.login_user()
-        user_name=self.user_name
-        self.welcome_msg=Label(root,text=f"Welcome {user_name}",font=("", 25))
-        self.welcome_msg.grid(row=0, column=3,padx=10,pady=20)
+        result = self.auth_login.login_user()
+        user_name = self.user_name
 
-        self.book_button=Button(self.root,text='Book Room',command=self.book_rooms,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
-        self.book_button.grid(row=4, column=3,padx=50)
+        # Welcome message
+        self.welcome_msg = Label(self.root, text=f"Welcome {user_name}", font=("", 25))
+        self.welcome_msg.grid(row=0, column=0, columnspan=4, padx=10, pady=20)
 
-        self.account_button=Button(self.root,text='My Account ',command=self.see_account,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
-        self.account_button.grid(row=4, column=4)
+        # Account Section
+        self.method_lable = Label(self.root, text="Account", font=("", 15))
+        self.method_lable.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
 
-        self.order_food_button=Button(self.root,text='Order Food',command=self.food_order,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
-        self.order_food_button.grid(row=6, column=3,padx=50,pady=50)
+        self.account_button = Button(self.root, text='My Account', command=self.see_account, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.account_button.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
 
-        self.booking_hisotry_button=Button(self.root,text='Booking History',command=self.booking_history,width=15,bg='#4CAF50',fg="white", font=("Arial", 12, "bold"))
-        self.booking_hisotry_button.grid(row=6, column=4)
+        # Booking Section
+        self.method_lable2 = Label(self.root, text="Booking", font=("", 15))
+        self.method_lable2.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="n")
+
+        self.book_button = Button(self.root, text='Book Room', command=self.book_rooms, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.book_button.grid(row=4, column=1, columnspan=2, padx=10, pady=10)
+
+        self.booking_hisotry_button = Button(self.root, text='Booking History', command=self.booking_history, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.booking_hisotry_button.grid(row=4, column=3, padx=10, pady=10)
+
+        # Food Section
+        self.method_lable3 = Label(self.root, text="Food", font=("", 15))
+        self.method_lable3.grid(row=5, column=0, columnspan=4, padx=10, pady=10, sticky="n")  
+
+        self.order_food_button = Button(self.root, text='Order Food', command=self.food_order, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.order_food_button.grid(row=6, column=1, columnspan=2, padx=10, pady=10)
+
+        self.order_status_button = Button(self.root, text='Order Status', command=self.order_status, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.order_status_button.grid(row=6, column=3, padx=10, pady=10)
+
+
 
     #User option menu clear
     def user_method_screen_clear(self):
@@ -114,6 +135,10 @@ class Hotel:
         self.order_food_button.destroy()
         self.welcome_msg.destroy()
         self.booking_hisotry_button.destroy()
+        self.order_status_button.destroy()
+        self.method_lable.destroy()
+        self.method_lable2.destroy()
+        self.method_lable3.destroy()
 
     #sign up form clear
     def user_creation_form_clear(self):
@@ -432,9 +457,37 @@ class Hotel:
                 else:
                     self.food_item_msg.config(text="You don't have any active room booking", bg='red')
                 
+    def order_status(self):
+        self.clear_screen()
+        user = User_actions()
+        result=user.order_status_check(self.user_email)
+        self.welcome_msg=Label(root,text=f"Order History",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10)
 
+        columns = ("order_id","room_no","food_name","quantity", "price","status")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
 
-            
+        self.tree.heading("order_id", text="Order_id")
+        self.tree.heading("room_no", text="Room_no")
+        self.tree.heading("food_name", text="Food_name")
+        self.tree.heading("quantity", text="Quantity")
+        self.tree.heading("price", text="Price")
+        self.tree.heading("status", text="status")
+
+        self.tree.column("order_id", width=80, anchor="center")
+        self.tree.column("room_no", width=50, anchor="center")
+        self.tree.column("food_name", width=100, anchor="center")
+        self.tree.column("quantity", width=50, anchor="center")
+        self.tree.column("price", width=100, anchor="center")
+        self.tree.column("status", width=100, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+        self.tree.grid(row=2, column=1, columnspan=3,padx=10)
+
+        back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='#9E9E9E')
+        back_button.grid(row=4,column=1,padx=15,pady=20, sticky='w')     
 
 
 
