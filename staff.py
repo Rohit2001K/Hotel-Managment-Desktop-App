@@ -19,21 +19,34 @@ class Staff:
         self.msg = Label(self.root, text=f'Welcome {result} To Staff Dashboard', font=("", 20))
         self.msg.grid(row=0, column=0, columnspan=2, padx=10, pady=10) 
 
-        self.check_out_button = Button(self.root, text='User Check Out', command=self.user_check_out, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
-        self.check_out_button.grid(row=1, column=0, padx=20, pady=10, sticky="w")
+        #user section
+        method_lable = Label(self.root, text="User Account",bg='yellow', font=("", 15))
+        method_lable.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
 
         self.account_updation_button = Button(self.root, text='User Account Updation', command='', width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
-        self.account_updation_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
+        self.account_updation_button.grid(row=2, column=0, padx=20, pady=10, sticky="w")
 
+        #booking section
+        method_lable1 = Label(self.root, text="User Check Out",bg='yellow', font=("", 15))
+        method_lable1.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
 
-        self.food_list_button = Button(self.root, text='Food Iteams', command=self.list_food_iteam, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
-        self.food_list_button.grid(row=2, column=0, padx=20, pady=10, sticky="w")
-
-        self.food_requst_button = Button(self.root, text='User Food Requests', command=self.food_request, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
-        self.food_requst_button.grid(row=2, column=1, padx=10, pady=10, sticky="w")
+        self.check_out_button = Button(self.root, text='User Check Out', command=self.user_check_out, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.check_out_button.grid(row=4, column=0, padx=20, pady=10, sticky="w")
 
         self.booking_histroy_button = Button(self.root, text='Booking History', command=self.booking_histroy, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
-        self.booking_histroy_button.grid(row=3, column=0, padx=20, pady=10, sticky="w")
+        self.booking_histroy_button.grid(row=4, column=1, padx=20, pady=10, sticky="w")
+        
+        #food section
+        method_lable3 = Label(self.root, text="Food Section",bg='yellow', font=("", 15))
+        method_lable3.grid(row=5, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
+
+        self.food_list_button = Button(self.root, text='Food Iteams', command=self.list_food_iteam, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.food_list_button.grid(row=6, column=0, padx=20, pady=10, sticky="w")
+
+        self.food_requst_button = Button(self.root, text='User Food Requests', command=self.food_request, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.food_requst_button.grid(row=6, column=1, padx=10, pady=10, sticky="w")
+
+    
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
@@ -285,6 +298,6 @@ class Staff:
 
 
 
-#root=tkinter.Tk()
-#hotel=Staff(root,'motel@stuff.come')
-#root.mainloop()
+root=tkinter.Tk()
+hotel=Staff(root,'motel@stuff.come')
+root.mainloop()

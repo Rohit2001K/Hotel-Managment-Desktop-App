@@ -100,14 +100,14 @@ class Hotel:
         self.welcome_msg.grid(row=0, column=0, columnspan=4, padx=10, pady=20)
 
         # Account Section
-        self.method_lable = Label(self.root, text="Account", font=("", 15))
+        self.method_lable = Label(self.root, text="Account",bg='yellow', font=("", 15))
         self.method_lable.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
 
         self.account_button = Button(self.root, text='My Account', command=self.see_account, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
         self.account_button.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
 
         # Booking Section
-        self.method_lable2 = Label(self.root, text="Booking", font=("", 15))
+        self.method_lable2 = Label(self.root, text="Booking",bg='yellow', font=("", 15))
         self.method_lable2.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="n")
 
         self.book_button = Button(self.root, text='Book Room', command=self.book_rooms, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
@@ -117,7 +117,7 @@ class Hotel:
         self.booking_hisotry_button.grid(row=4, column=3, padx=10, pady=10)
 
         # Food Section
-        self.method_lable3 = Label(self.root, text="Food", font=("", 15))
+        self.method_lable3 = Label(self.root, text="Food",bg='yellow', font=("", 15))
         self.method_lable3.grid(row=5, column=0, columnspan=4, padx=10, pady=10, sticky="n")  
 
         self.order_food_button = Button(self.root, text='Order Food', command=self.food_order, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
