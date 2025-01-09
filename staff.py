@@ -298,6 +298,6 @@ class Staff:
 
 
 
-root=tkinter.Tk()
-hotel=Staff(root,'motel@stuff.come')
-root.mainloop()
+#root=tkinter.Tk()
+#hotel=Staff(root,'motel@stuff.come')
+#root.mainloop()

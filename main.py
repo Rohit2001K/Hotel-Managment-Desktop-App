@@ -45,8 +45,8 @@ class Hotel:
     def loginuser(self):
         self.email = self.user_email.get()  
         passwd = self.password.get()  
-        #self.email = 'test6'
-        #passwd = 'test6'
+        self.email = 'test6'
+        passwd = 'test6'
         
         if not self.email or not passwd:
             self.login_msg.config(text=f'Enter Info')
@@ -105,6 +105,9 @@ class Hotel:
 
         self.account_button = Button(self.root, text='My Account', command=self.see_account, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
         self.account_button.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
+
+        self.account_updation_button = Button(self.root, text='Account Updation', command=self.account_updation, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        self.account_updation_button.grid(row=2, column=3, columnspan=2, padx=10, pady=10)
 
         # Booking Section
         self.method_lable2 = Label(self.root, text="Booking",bg='yellow', font=("", 15))
@@ -489,7 +492,71 @@ class Hotel:
         back_button=Button(self.root,text='Back',command=self.user_method_screen,width=65,bg='#9E9E9E')
         back_button.grid(row=4,column=1,padx=15,pady=20, sticky='w')     
 
+    def account_updation(self):
+        self.clear_screen()
+        user = User_actions()
+        result=user.account_info_fetch(self.user_email)
+        fname=result[0][0]
+        lname=result[0][1]
+        mob_no=result[0][2]
+        email=result[0][3]
 
+        self.welcome_msg=Label(root,text=f"Account Info",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10,padx=20)
+
+        #first name
+        fname_lable=Label(self.root,text='Fist name : ', font=("Arial", 15, "bold"))
+        fname_lable.grid(row=2,column=1,pady=10)
+        self.fname_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.fname_entry.grid(row=2,column=2,pady=10)
+        self.fname_entry.insert(0,fname)
+
+        #last name
+        lname_lable=Label(self.root,text='Last name : ', font=("Arial", 15, "bold"))
+        lname_lable.grid(row=3,column=1,pady=10)
+        self.lname_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.lname_entry.grid(row=3,column=2,pady=10)
+        self.lname_entry.insert(0,lname)
+
+        #mobile no
+        mob_no_lable=Label(self.root,text='Mobile No. : ', font=("Arial", 15, "bold"))
+        mob_no_lable.grid(row=4,column=1,pady=10)
+        self.mob_no_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.mob_no_entry.grid(row=4,column=2,pady=10)
+        self.mob_no_entry.insert(0,mob_no)
+
+        #email
+        email_lable=Label(self.root,text='Email : ', font=("Arial", 15, "bold"))
+        email_lable.grid(row=5,column=1,pady=10)
+        self.email_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.email_entry.grid(row=5,column=2,pady=10)
+        self.email_entry.insert(0,email)
+
+        #message
+        messge_lable=Label(self.root,text="Leave blank if you don't want to change password",bg='yellow')
+        messge_lable.grid(row=6,column=1,sticky='n')
+        
+        #password1
+        passwd_lable=Label(self.root,text='New Password : ', font=("Arial", 15, "bold"))
+        passwd_lable.grid(row=8,column=1,pady=10)
+        self.passwd_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.passwd_entry.grid(row=8,column=2,pady=10)
+
+        #password2
+        passwd_lable2=Label(self.root,text='Confirm Password : ', font=("Arial", 15, "bold"))
+        passwd_lable2.grid(row=9,column=1,pady=10)
+        self.passwd2_entry=Entry(self.root,width=30, font=("Arial", 10))
+        self.passwd2_entry.grid(row=9,column=2,pady=10)
+
+        #buttons
+        confirm_button=Button(self.root,text='Update Info',width=30,command='',bg='#4CAF50')
+        confirm_button.grid(row=11,column=1)
+        back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='#9E9E9E')
+        back_button.grid(row=11,column=2 ,sticky='w')     
+
+    def account_updation_confirm(self):
+        user = User_actions()
+        
 
 
 root=tkinter.Tk()

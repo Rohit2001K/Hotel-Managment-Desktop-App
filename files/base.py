@@ -19,7 +19,10 @@ class User_actions:
         else:
             return False
 
-
+    def account_info_fetch(self,email):
+        cursor.execute('select fname,lname,mobile,email from users where email=%s',(email,))
+        result=cursor.fetchall()
+        return result
         
     def create_user(self,fname,lname,mno,email,password):
         try:
