@@ -45,8 +45,8 @@ class Hotel:
     def loginuser(self):
         self.email = self.user_email.get()  
         passwd = self.password.get()  
-        self.email = 'test6'
-        passwd = 'test6'
+        #self.email = 'test6'
+        #passwd = 'test6'
         
         if not self.email or not passwd:
             self.login_msg.config(text=f'Enter Info')
@@ -134,6 +134,7 @@ class Hotel:
     #User option menu clear
     def user_method_screen_clear(self):
         self.book_button.destroy()
+        self.account_updation_button.destroy()
         self.account_button.destroy()
         self.order_food_button.destroy()
         self.welcome_msg.destroy()
@@ -525,16 +526,9 @@ class Hotel:
         self.mob_no_entry.grid(row=4,column=2,pady=10)
         self.mob_no_entry.insert(0,mob_no)
 
-        #email
-        email_lable=Label(self.root,text='Email : ', font=("Arial", 15, "bold"))
-        email_lable.grid(row=5,column=1,pady=10)
-        self.email_entry=Entry(self.root,width=30, font=("Arial", 10))
-        self.email_entry.grid(row=5,column=2,pady=10)
-        self.email_entry.insert(0,email)
-
         #message
-        messge_lable=Label(self.root,text="Leave blank if you don't want to change password",bg='yellow')
-        messge_lable.grid(row=6,column=1,sticky='n')
+        self.UC_messge_lable=Label(self.root,text="Leave blank if you don't want to change password",bg='yellow')
+        self.UC_messge_lable.grid(row=6,column=1,sticky='n')
         
         #password1
         passwd_lable=Label(self.root,text='New Password : ', font=("Arial", 15, "bold"))
@@ -549,14 +543,41 @@ class Hotel:
         self.passwd2_entry.grid(row=9,column=2,pady=10)
 
         #buttons
-        confirm_button=Button(self.root,text='Update Info',width=30,command='',bg='#4CAF50')
+        confirm_button=Button(self.root,text='Update Info',width=30,command=self.account_updation_confirm,bg='#4CAF50')
         confirm_button.grid(row=11,column=1)
         back_button=Button(self.root,text='Back',command=self.user_method_screen,width=30,bg='#9E9E9E')
-        back_button.grid(row=11,column=2 ,sticky='w')     
+        back_button.grid(row=11,column=2 ,sticky='w')
 
+    #updating info without entring password
+    def account_updation_without_pass(self):
+        user = User_actions()
+        email=self.user_email
+        fname=self.fname_entry.get()
+        lname=self.lname_entry.get()
+        mobile=self.mob_no_entry.get()
+        result=user.user_acc_update(email,fname,lname,mobile)
+        if not result:
+                self.UC_messge_lable.config(text='ERROR IN UPDATING USER INFO',bg='red')
+        else:
+            self.UC_messge_lable.config(text='User Information Updated',bg='green')  
+
+    #updating user info with password and other info
     def account_updation_confirm(self):
         user = User_actions()
-        
+        email=self.user_email
+        passwd1=self.passwd_entry.get()
+        passwd2=self.passwd2_entry.get()
+        if not passwd1 or not passwd2:
+            self.account_updation_without_pass()    
+        else:
+            if passwd1==passwd2:
+                result=user.user_acc_password_update(email,passwd1)
+                self.account_updation_without_pass() 
+                if result:
+                    self.UC_messge_lable.config(text='User Info Updated',bg='green') 
+                else:
+                    self.UC_messge_lable.config(text='ERROR IN UPDATING PASS',bg='red')
+
 
 
 root=tkinter.Tk()

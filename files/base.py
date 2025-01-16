@@ -110,6 +110,22 @@ class User_actions:
         cursor.execute('select order_id,room_no,food_name,quantity,price,status from orders where user_id=%s',(uid,))
         result=cursor.fetchall()
         return result
+    
+    def user_acc_update(self,email,fname,lname,mobile):
+        try:
+            cursor.execute('UPDATE users SET fname=%s, lname=%s, mobile=%s WHERE email=%s', (fname, lname, mobile, email))
+            my_sql.commit()
+            return True
+        except:
+            return False
+
+    def user_acc_password_update(self,email,passwd):
+        try:
+            cursor.execute('UPDATE users SET password=%s where email=%s', (passwd, email,))
+            my_sql.commit()
+            return True
+        except:
+            return False
 
 #staff dashboard
 class Staff_action:
