@@ -41,6 +41,9 @@ class Hotel:
         self.User_create_button=Button(self.root,text='Create account',command=self.user_creation_form,width=30,bg='#ADD8E6')
         self.User_create_button.grid(row=5, column=3, padx=10, pady=10)
 
+        self.user_forget_passwd=Button(self.root,text="Forgot Password?",command=self.user_passwd_rest_request,width=30,bg='#ADD8E6')
+        self.user_forget_passwd.grid(row=6, column=3, padx=10, pady=10)
+
     #main user login function
     def loginuser(self):
         self.email = self.user_email.get()  
@@ -87,7 +90,31 @@ class Hotel:
         self.password.destroy()
         self.login_button.destroy()
         self.User_create_button.destroy()
+        self.user_forget_passwd.destroy()
 
+    #forgot password method
+    def user_passwd_rest_request(self):
+        self.clear_screen()
+        
+        welcome_msg = Label(self.root, text="Forgot Password?", font=("", 25))
+        welcome_msg.grid(row=0, column=0, columnspan=4, padx=10, pady=20)
+
+        rest_passwd_msg = Label(self.root, 
+                                text="If you wish to reset your password due to forgetfulness, "
+                                    "you can request a reset here. We will forward your request to a staff member "
+                                    "for verification. Please approach a staff member for further assistance.",
+                                bg='yellow', 
+                                justify=LEFT, wraplength=400)
+        rest_passwd_msg.grid(row=1, column=0, columnspan=4, padx=10, pady=10)
+
+        user_email_label = Label(self.root, text="Email : ")
+        user_email_label.grid(row=2, column=0, padx=10, pady=10)
+        
+        self.user_email_filed = Entry(self.root, width=30)
+        self.user_email_filed.grid(row=2, column=1, padx=10, pady=10)
+
+        request_button = Button(self.root, text="Submit", width=40,bg='#4CAF50')
+        request_button.grid(row=3, column=0, columnspan=4, pady=20)
 
     #after login,user option menu
     def user_method_screen(self):

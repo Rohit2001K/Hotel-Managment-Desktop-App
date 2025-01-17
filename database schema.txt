@@ -65,3 +65,11 @@ CREATE TABLE orders (
     order_date DATETIME DEFAULT CURRENT_TIMESTAMP,                 
     FOREIGN KEY (user_id) REFERENCES users(uid)
 );
+
+CREATE TABLE password_reset_requests (
+    sno INT AUTO_INCREMENT PRIMARY KEY,   
+    email VARCHAR(255) NOT NULL,             
+    request_status varchar(50) DEFAULT 'pending',
+    staff_member_email VARCHAR(255),  
+    request_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
