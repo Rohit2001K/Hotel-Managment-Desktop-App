@@ -31,7 +31,38 @@ class User_actions:
             return True
         except:
             return False 
-        
+
+    #for user password requests
+    def check_previous_request(self,email):
+        cursor.execute('SELECT * FROM password_reset_requests where email=%s and request_status="pending"',(email,))
+        result=cursor.fetchall()
+        if result:
+            return True
+        return False
+    
+    def check_user_exsist(self,email):
+        cursor.execute("SELECT email FROM users Where email=%s",(email,))
+        result=cursor.fetchall()
+        if result:
+            return True
+        return False
+    
+    def password_reset(self, email):
+        pending_request = self.check_previous_request(email)
+        user_exsist=self.check_user_exsist(email)
+        if pending_request:
+            return "pending request"
+        elif not user_exsist:
+            return "user_exsist_false"
+
+        else:
+            try:
+                cursor.execute("INSERT INTO password_reset_requests (email) VALUES (%s)", (email,))
+                my_sql.commit()
+                return "done"
+            except:
+                return "error"
+            
 
     def room_booking(self):
         cursor.execute('select room_no,beds,price from Rooms where available=True')
@@ -126,6 +157,8 @@ class User_actions:
             return True
         except:
             return False
+
+
 
 #staff dashboard
 class Staff_action:

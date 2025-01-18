@@ -107,14 +107,39 @@ class Hotel:
                                 justify=LEFT, wraplength=400)
         rest_passwd_msg.grid(row=1, column=0, columnspan=4, padx=10, pady=10)
 
-        user_email_label = Label(self.root, text="Email : ")
-        user_email_label.grid(row=2, column=0, padx=10, pady=10)
+        self.rest_passwd_log=Label(self.root,text='Please Enter Email',bg='yellow')
+        self.rest_passwd_log.grid(row=2,column=0)
+
+        self.user_email_label = Label(self.root, text="Email : ")
+        self.user_email_label.grid(row=4, column=0, padx=10, pady=10)
         
         self.user_email_filed = Entry(self.root, width=30)
-        self.user_email_filed.grid(row=2, column=1, padx=10, pady=10)
+        self.user_email_filed.grid(row=4, column=1, padx=10, pady=10)
 
-        request_button = Button(self.root, text="Submit", width=40,bg='#4CAF50')
-        request_button.grid(row=3, column=0, columnspan=4, pady=20)
+        self.request_button = Button(self.root, text="Submit",command=self.password_rest, width=40,bg='#4CAF50')
+        self.request_button.grid(row=5, column=0, columnspan=4, pady=20)
+
+        back_button=Button(self.root,text="Back",command=self.login_form,width=40,bg='#9E9E9E')
+        back_button.grid(row=6, column=0, columnspan=4)
+
+    #user reset request method confirmation
+    def password_rest(self):
+        user = User_actions()
+        email=self.user_email_filed.get()
+        if not email:
+            self.rest_passwd_log.config(text="Please enter email first!",bg='red')
+        else:
+            result=user.password_reset(email)
+            if result=="done":
+                self.rest_passwd_log.config(text="Request Submitted.",bg='green')
+                self.request_button.config(state="disabled")
+            elif result=="pending request":
+                self.rest_passwd_log.config(text="Email already used for a request.",bg='red')
+                self.request_button.config(state="disabled")
+            elif result=="user_exsist_false":
+                self.rest_passwd_log.config(text="User Not Found With This Email",bg='red')
+                self.request_button.config(state="disabled")
+
 
     #after login,user option menu
     def user_method_screen(self):
