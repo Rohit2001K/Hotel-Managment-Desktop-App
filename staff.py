@@ -26,6 +26,8 @@ class Staff:
         self.account_updation_button = Button(self.root, text='User Account Updation', command='', width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
         self.account_updation_button.grid(row=2, column=0, padx=20, pady=10, sticky="w")
 
+        password_reset_button=Button(self.root,text="Password Reset Requests",command=self.password_reset,width=20,bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
+        password_reset_button.grid(row=2, column=1, padx=20, pady=10, sticky="w")
         #booking section
         method_lable1 = Label(self.root, text="User Check Out",bg='yellow', font=("", 15))
         method_lable1.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="n") 
@@ -45,12 +47,6 @@ class Staff:
 
         self.food_requst_button = Button(self.root, text='User Food Requests', command=self.food_request, width=20, bg='#4CAF50', fg="white", font=("Arial", 12, "bold"))
         self.food_requst_button.grid(row=6, column=1, padx=10, pady=10, sticky="w")
-
-    
-
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()    
 
     def user_check_out(self):
         self.clear_screen()
@@ -296,8 +292,151 @@ class Staff:
         else:
             self.food_item_msg.config(text="Plese Select Food Item Fist Before Changing Status")
 
+#user password reset request functions
+#All pending requests fetch
+    def password_reset(self):
+        self.clear_screen()
+        staff=self.user
+        result=staff.password_rest()
 
+        self.welcome_msg=Label(self.root,text="Rest Requests",font=("", 25))
+        self.welcome_msg.grid(row=0, column=1,pady=10,padx=10)
 
-#root=tkinter.Tk()
-#hotel=Staff(root,'motel@stuff.come')
-#root.mainloop()
+        columns = ("Sno.","User Email","Status","Created On")
+        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
+        self.tree.heading("Sno.", text="Sno.")
+        self.tree.heading("User Email", text="User Email")
+        self.tree.heading("Status", text="Status")
+        self.tree.heading("Created On", text="Created On")
+
+        self.tree.column("Sno.", width=50, anchor="center")
+        self.tree.column("User Email", width=80, anchor="center")
+        self.tree.column("Status", width=100, anchor="center")
+        self.tree.column("Created On", width=150, anchor="center")
+
+        for row in result:
+            self.tree.insert("", "end", values=row)
+
+        self.tree.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
+
+        self.rest_msg = Label(self.root, text='Select one of the pending request', bg='yellow')
+        self.rest_msg.grid(row=3, column=1, padx=10, pady=10, columnspan=3)
+
+        accept_button = Button(self.root, text='Accept Request And Verify', command=self.verify_request, width=50, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        accept_button.grid(row=4, column=1, padx=10, pady=5, sticky="w")
+
+        cancel_button = Button(self.root, text='Cancel Request', command=self.cancel_user_request, width=50, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        cancel_button.grid(row=5, column=1, padx=10, pady=5, sticky="w")
+
+        back_button = Button(self.root, text='Go Back', command=self.staff_dashboard, width=50,bg='#9E9E9E', fg="white", font=("Arial", 10, "bold"))
+        back_button.grid(row=6, column=1, padx=10, pady=5, sticky="w")
+
+#cancelling user password reset request
+    def cancel_user_request(self):
+        staff=self.user
+        selected_item=self.tree.selection() 
+        if selected_item:
+            selected_item=self.tree.item(selected_item, "values")
+            user_email = selected_item[1]
+            status="cancelled"
+            staff.update_reset_request_status(user_email,self.user_email,status)
+            self.rest_msg.config(text="User reset request cancelled..")
+        else:
+            self.rest_msg.config(text="Please select any user before continue",bg='red')
+
+#after selecting specific user from table ,user account fetch function
+    def verify_request(self):
+        self.clear_screen_tree()
+        staff=self.user
+        selected_item=self.tree.selection() 
+        if selected_item:
+            selected_item=self.tree.item(selected_item, "values")
+            user_email = selected_item[1]
+            result=staff.user_account_info_fetch(user_email)
+
+            welcome_msg=Label(self.root,text="Reset Requests",font=("", 25))
+            welcome_msg.grid(row=0, column=0,pady=10)
+
+            imp_msg=Label(self.root,text="Please verify the user's information and match it with the details below.",bg='yellow')
+            imp_msg.grid(row=1,column=0,padx=10, pady=10, sticky='w')
+            fname_lable = Label(self.root, text=f'First name:-  {result[0][0]}', font=("", 15))
+            fname_lable.grid(row=2, column=0, padx=10, pady=10, sticky='w')
+
+            lname_lable = Label(self.root, text=f'Last name:-  {result[0][1]}', font=("", 15))
+            lname_lable.grid(row=3, column=0, padx=10, pady=10, sticky='w')
+
+            mobileno_lable = Label(self.root, text=f'Mobile No:-  {result[0][2]}', font=("", 15))
+            mobileno_lable.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+
+            email_lable = Label(self.root, text=f'Email:-  {result[0][3]}', font=("", 15))
+            email_lable.grid(row=5, column=0, padx=10, pady=10, sticky='w')
+
+            verify_button=Button(self.root,text='Verify And Set New Password',command=lambda: self.set_password(user_email),width=50, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+            verify_button.grid(row=6, column=0, padx=10, pady=5, sticky="w")
+
+            back_button = Button(self.root, text='Back', command=self.password_reset, width=50,bg='#9E9E9E', fg="white", font=("Arial", 10, "bold"))
+            back_button.grid(row=7, column=0, padx=10, pady=5, sticky="w")
+
+        else:
+            self.password_reset()
+            self.rest_msg.config(text="Please select any user before continue",bg='red')
+
+#setting up new password
+    def set_password(self,user_email):
+        self.clear_screen_tree()
+        welcome_msg = Label(self.root, text="Set Password", font=("", 25))
+        welcome_msg.grid(row=0, column=0, columnspan=2, pady=20)
+
+        self.msg=Label(self.root,text="Enter a new password",bg='yellow')
+        self.msg.grid(row=1,column=0,padx=10)
+
+        passowrd1_label = Label(self.root, text='Password : - ')
+        passowrd1_label.grid(row=2, column=0, padx=10, pady=5, sticky="e") 
+        self.passowrd1 = Entry(self.root, width=30)
+        self.passowrd1.grid(row=2, column=1, padx=10, pady=5)
+
+        passowrd2_label = Label(self.root, text='Confirm Password : - ')
+        passowrd2_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")  
+        self.passowrd2 = Entry(self.root, width=30)
+        self.passowrd2.grid(row=3, column=1, padx=10, pady=5)
+
+        self.verify_button = Button(self.root, text='Set Password', command=lambda: self.set_passwd_confirm(user_email), width=50, bg='#4CAF50', fg="white", font=("Arial", 10, "bold"))
+        self.verify_button.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+
+        back_button = Button(self.root, text='Back', command=self.password_reset, width=50, bg='#9E9E9E', fg="white", font=("Arial", 10, "bold"))
+        back_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+
+#updating password 
+    def set_passwd_confirm(self,user_email):
+        staff=self.user
+        passwd1=self.passowrd1.get()
+        passwd2=self.passowrd2.get()
+
+        if not passwd1 or not passwd2:
+            self.msg.config(text="Please enter password in both fields",bg='red')
+        else:
+            if passwd1==passwd2:
+                result=staff.user_password_set(user_email,passwd1)
+                if result:
+                    status="completed"
+                    staff.update_reset_request_status(user_email,self.user_email,status)
+                    self.msg.config(text="Password Updated",bg='green')
+                    self.verify_button.config(state="disabled")
+                else:
+                    self.msg.config(text="Error in settting new password",bg='red')
+            else:
+                self.msg.config(text="Please enter same password in both fields",bg='red')
+
+    #screen clearing methods
+    def clear_screen_tree(self):
+        for widget in self.root.winfo_children():
+            widget.grid_forget()         
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()        
+
+#testing
+root=tkinter.Tk()
+hotel=Staff(root,'motel@stuff.come')
+root.mainloop()

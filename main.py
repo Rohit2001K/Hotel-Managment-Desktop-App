@@ -14,7 +14,7 @@ class Hotel:
         self.login_form()
 
 
-#login form which take user inputs
+#login form, which take user inputs
     def login_form(self):
 
         #clearning previous screen
@@ -78,9 +78,6 @@ class Hotel:
         staff_window = Toplevel(self.root)
         staff_app = Staff(staff_window, self.email) 
         staff_window.mainloop()
-
-    
-
 
     #clearing login screen
     def login_screen_clear(self):
@@ -284,7 +281,7 @@ class Hotel:
             else:
                 self.login_msg.config(text=f'Please Check Your Passwords')
 
-    #clear everything function
+    #clear everything
     def clear_screen(self):
         for widget in self.root.winfo_children():
             widget.destroy()        
